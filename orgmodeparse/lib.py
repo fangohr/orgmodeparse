@@ -5,8 +5,8 @@ def sections_split(string):
     """
     sections = []
     this = []
-    for line in string.split():
-        if line[0] == '*':
+    for line in string.splitlines():
+        if len(line) > 0 and line[0] == '*':
             # new section starts
             ## save old section
             if this is not []:
@@ -19,4 +19,9 @@ def sections_split(string):
     # add last section
     if this is not []:
         sections.append("\n".join(this))
+
+    # if first element is empty string, remove
+    if sections[0] == '':
+        sections.pop(0)
+
     return sections
