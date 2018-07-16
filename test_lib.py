@@ -44,6 +44,15 @@ def test_find_sections_empty():
     assert l.sections_split("") == []
 
 
+def test_line_parse():
+    key, value = l.line_parse("#+BEGIN: clocktable :maxlevel 3")
+    assert key == "#+BEGIN:"
+    assert value == "clocktable :maxlevel 3"
+
+    key, value = l.line_parse("#+END:")
+    assert key == "#+END:"
+    assert value == ""
+
 def test_identify_clock_table():
 
     # define test string
@@ -59,7 +68,9 @@ def test_identify_clock_table():
 | \emsp\emsp <2018-03-02 Fri> |        |      | 4:30 |
 #+END:
 """
-    meta, table = l.identify_clock_table(s)
+    tables = l.identify_tables(s)
+    assert len(tables) == 1  #
+    meta, output = tables
     assert meta['#+BEGIN:'] == "clocktable :maxlevel 3 :scope subtree"
     assert meta['#+CAPTION:'] == "Clock summary at [2018-03-04 Sun 18:26]"
     assert meta['#+END:'] == ""
